@@ -75,6 +75,33 @@ UML表示操作：
 	            单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取
 	>建造者模式
 	>原型模式
+		某些系统中存在大量或者相类似对象的创建问题，用传统的构造函数来创建对象，会比较复杂而且耗时耗资源。原型模式定义：用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或类似的新对象。
+		结构与实现：
+			java提供来clone()方法，所以实现原型模式很简单。
+			·模式的结构：
+				包括以下主要角色：
+					1.抽象原型类：规定了具体原型对象必须实现的接口。
+					2.具体原型类：实现抽象原型类的clone()方法，它是可被复制的对象。
+					3.访问类：使用具体原型类中的clone（）方法来复制新的对象。
+			·模式的实现：
+				原型模式的克隆分为浅克隆和深克隆，java中的object类提供了浅克隆的clone()，具体原型类只要实现cloneable接口就可以实现对象的浅克隆，此处的cloneable接口就是抽象原型类代码：
+//具体原型类
+class Realizetype implements Cloneable {
+	Realizetype{
+		xxx
+	}
+	public Object clone() throws CloneNotSupportException{
+		return (Realizetype)super.clone();
+	}
+}
+//原型模式的测试类-访问类
+public class PrototypeTest{
+	public static void main(String[] args) throws CloneNotSupportException{
+		Realizetype obj1 = new Realizetype();
+		Realizetype obj2 = (Realizetype)obj1.clone();
+		xxx
+	}
+}
 ·结构性模式：
     关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。
         >适配器模式
