@@ -1,3 +1,5 @@
+package demo.sunwukong;
+
 import javax.swing.*;
 
 /**
@@ -13,7 +15,8 @@ public class SunWuKong extends JPanel implements Cloneable {
     private static final long serialVersionUID = 5543049531872119328L;
 
     public SunWuKong() {
-        JLabel l1 = new JLabel(new ImageIcon("Wukong.jpg"));
+//        JLabel l1 = new JLabel(new ImageIcon("/Users/zhanhongyu/Documents/GitHub/DesignPattern/PrototypePattern/src/main/resources/Wukong.jpg"));
+        JLabel l1 = new JLabel(new ImageIcon("src/main/resources/Wukong.jpg"));
         this.add(l1);
     }
 

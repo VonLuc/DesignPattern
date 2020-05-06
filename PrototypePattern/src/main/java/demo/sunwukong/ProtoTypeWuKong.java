@@ -1,4 +1,4 @@
-import netscape.security.UserTarget;
+package demo.sunwukong;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +20,7 @@ public class ProtoTypeWuKong {
         contentPane.add(obj1);
         SunWuKong obj2 = (SunWuKong)obj1.clone();
         contentPane.add(obj2);
-        jf.pack();;
+        jf.pack();
         jf.setVisible(true);
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
