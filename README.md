@@ -32,7 +32,99 @@ UML表示操作：
 设计模式
 ·创建型模式：
     提供了一种在创建对象的同时隐藏创建逻辑的方式，避免使用new实例化对象。使程序在判断针对某个给定实例需要创建哪些对象时更加灵活
-        >工厂模式
+    	>工厂方法模式
+	    ·定义：定义一个创建产品对象的工厂接口，将产品对象的实际创建工作推迟到具体子工厂类当中。满足创建型模式中要求的"创建与使用相分离"的特点。把被创建的对象称为产品，把创建产品的对象成为工厂。如要创建的产品不多，只需要一个工厂类就可以，此模式叫做简单工厂模式，简单工厂模式不属于gof23种经典模式，他的缺点是增加新产品时会违背开闭原则。“工厂方法模式”是对简单工厂模式的进一步抽象化，其好处是可以使系统在不修改原来代码的情况下引进新的产品，即满足开闭原则。
+	    ·工厂方法模式优点：
+	    >用户只需要知道具体工厂的名称就可以得到所要的产品，无需知道产品的具体创建过程；
+	    >在系统增加新的产品时只需要添加具体产品类和对应的具体工厂类，无需对原工厂进行任何修改，满足开闭原则；
+	    ·工厂方法模式缺点：
+	    >每增加一个产品就要增加一个具体产品类和一个对应的具体工厂类，增加系统的复杂度。
+	    ·模式的结构与实现：工厂方法模式由抽象工厂、具体工厂、抽象产品和具体产品等4个要素构成。
+	    ·模式的结构：
+		工厂模式的主要角色：
+		1.抽象工厂abstract factory：提供创建产品的接口，调用者通过它访问具体工厂的工厂方法new Product()来创建产品
+		2.具体工厂concrete factory:主要实现抽象工厂中的抽象方法，完成具体产品的创建
+		3.抽象产品product：定义了产品规范，描述了产品的主要特性和功能
+		4.具体产品concrete product：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。
+	    ·模式的实现：
+public class AbstractFactoryTest{
+	public static void main(String[] args){
+		try{
+			Product a;
+			AbstractFactory af;
+			af = (AbstractFactory) ReadXML1.getObject();
+			a = af.newProduct();
+			a.show();
+		}catch(Exception e){
+			System.out.println(e,getMessage());
+		}
+	}
+}
+//抽象接口：提供产品的接口
+interface Product{
+	public void show();
+}
+//具体产品1:实现抽象产品中的抽象方法
+class ConcreteProduct1 implements Product{
+	public void show(){
+		System....
+	}
+}
+//具体产品2
+class ConcreteProdut2 implements Prouct{
+	public void show(){
+		System....
+	}
+}
+//抽象工厂：提供了产品的生成方法
+interface AbstractFactory{
+	public Product newProduct();
+}
+//具体工厂1:实现了产品的生成方法
+class ConcreteFactory1 implements AbstractFactory{
+	public Product newProduct(){
+		System.out.println("具体工厂1生成-->具体产品1...");
+		return new ConcreteProduct1();
+	}
+}
+//具体工厂2:实现了产品的生成方法
+class ConcreteFactory2 implements AbstractFactory
+{
+    public Product newProduct()
+    {
+        System.out.println("具体工厂2生成-->具体产品2...");
+        return new ConcreteProduct2();
+    }
+}
+//方法用于从xml配置文件中提取具体类类名，并返回一个实例对象
+class ReadXML1{
+	pulic static object getObject(){
+	try{
+	    //创建文档对象
+            DocumentBuilderFactory dFactory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder=dFactory.newDocumentBuilder();
+            Document doc;                           
+            doc=builder.parse(new File("src/FactoryMethod/config1.xml"));        
+            //获取包含类名的文本节点
+            NodeList nl=doc.getElementsByTagName("className");
+            Node classNode=nl.item(0).getFirstChild();
+            String cName="FactoryMethod."+classNode.getNodeValue();
+            //System.out.println("新类名："+cName);
+            //通过类名生成实例对象并将其返回
+            Class<?> c=Class.forName(cName);
+              Object obj=c.newInstance();
+            return obj;
+         }  
+         catch(Exception e)
+         {
+                   e.printStackTrace();
+                   return null;
+         }
+		}catch(){
+
+		}
+	}
+}
 	>抽象工厂模式
 	>单例模式
 	    ·为节省资源、保证数据内容的一致性，对某些类要求只能创建一个实例，即单例模式
