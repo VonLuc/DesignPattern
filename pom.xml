@@ -12,6 +12,7 @@
         <module>FactoryPattern</module>
         <module>SingletonPattern</module>
         <module>PrototypePattern</module>
+        <module>AbstractFactory</module>
     </modules>
 
 
