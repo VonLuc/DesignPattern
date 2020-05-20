@@ -165,7 +165,6 @@ class ReadXML1{
 	    扩展：抽象工厂模式的扩展有一定的开闭原则倾斜性：
 	        ·当增加一个新的产品族时只需要增加一个新的具体工厂，不需要修改源代码，满足开闭原则
 	        ·当产品族中需要增加一个新种类的产品时，则所有的工厂类都需要进行修改不满足开闭原则
-	        
 	>单例模式
 	    ·为节省资源、保证数据内容的一致性，对某些类要求只能创建一个实例，即单例模式
 	    单例模式定义：一个类只有一个实例，且该类自行创建这个实例的一种模式。
@@ -204,8 +203,80 @@ class ReadXML1{
 	            }
 	            注意：饿汉模式在类创建时就以创建好一个静态的对象供系统使用，以后不再改变，是线程安全。
 	            应用场景：某类只要求生成一个对象/当对象需要被共享的场合，为了节省内存，加快对象访问速度/某类需要频繁实例化，而创建对象又需要频繁销毁，如线程池、网络连接池
-	            单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取
-	>建造者模式
+	            单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取。
+	>建造者模式 Builder
+	    建造者于工厂模式关注点不同，建造者模式注重零部件的组装过程，工厂方法模式注重零部件的创建过程，二者可结合使用
+	    ·定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示。
+	    ·优点：
+	        >各个具体的建造者相互独立，有利于系统库扩展
+	        >客户端不必知道产品内部组成的细节，便于控制细节风险
+	    ·缺点：
+	        >产品的组成必须相同，限制了使用范围
+	        >若产品的内部变化复杂，该模式会增加很多的建造者类
+	    结构与实现：
+	        模式结构：
+	            1.产品角色 包含多个组成部件的复杂对象，由具体建造者创建各个部件
+	            2.抽象建造者 是一个包含创建产品各个子部件抽象方法的接口，通常还包含一个返回复杂产品的方法getResult()
+	            3.具体建造者 实现Builder接口，完成复杂产品的各个部件的具体创建方法
+	            4.指挥者 调用建造者对象中的部件构造与装配方法完成复杂对象的创建，在指挥者中不涉及具体产品的信息
+	            class Product{
+	                private String PartA;
+	                private String PartB;
+	                private String PartC;
+	                public void setPartA(String partA){
+	                    this.partA = partA;
+	                }
+	                public void setPartB(String partB){
+                    	this.partB = partB;
+                    }
+                    public void setPartC(String partC){
+                    	this.partC = partC;
+                    }
+                    public void show(){
+                    //
+                    }
+	            }
+	            abstract class Builder{
+	                protected Product product = new Product();
+	                public abstract void buildPartA();
+	                public abstract void buildPartB();
+	                public abstract void buildPartC();
+	                public Product getResult(){
+	                    return product;
+	                }
+	            }
+	            public class ConcreteBuilder extends Builder{
+	                public void buildPartA(){
+	                    product.setPartA("jianzao a");
+	                }
+	                public void buildPartB(){
+                    	product.setPartB ("jianzao b");
+                    }
+                    public void buildPartC(){
+                    	product.setPartC("jianzao c");
+                    }
+	            }
+	            class Director{
+	                private Builder builder;
+	                public Director(Builder builder){
+	                    this.builder = builder;
+	                }
+	                //产品构建与组装方法
+	                public Product construct(){
+	                    builder.buildPartA();
+	                    builder.buildPartB();
+	                    builder.buildPartC();
+	                    return builder.getResult();
+	                }
+	            }
+	            public class Client{
+	                public static void main(String[] args){
+	                    Builder builder = new ConcreteBuilder();
+	                    Director director = new Director(builder);
+	                    Product product = director.construct();
+	                    product.show();
+	                }
+	            }
 	>原型模式
 		某些系统中存在大量或者相类似对象的创建问题，用传统的构造函数来创建对象，会比较复杂而且耗时耗资源。原型模式定义：用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或类似的新对象。
 		结构与实现：
