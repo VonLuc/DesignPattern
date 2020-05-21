@@ -23,7 +23,7 @@ UML表示操作：
     关联关系Association是对象之间的一种引用关系，用于表示一类对象与另一类对象之间的联系。
     关联关系是类与类之间最常用的一种关系，分为一般关联关系、聚合关系和组合关系：
         关联可以是双向的，也可以单向。双向关联可以用带两个箭头或者没有箭头的实线表示，单向关联用带一个箭头实线表示，箭头从使用类指向被关联的类，也可以在关联线的两端标注角色名，代表两种不同的角色。
-        聚合关系 aggregaion关系是关联关系的一种，是强关联关系，是整体和部分之间的关系，是has-a的关系。聚合关系通过成员对象实现，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。（例如学校、老师） 聚合关系用空心菱形的实线表示，菱形指向整体。
+        聚合关系 aggregation关系是关联关系的一种，是强关联关系，是整体和部分之间的关系，是has-a的关系。聚合关系通过成员对象实现，其中成员对象是整体对象的一部分，但是成员对象可以脱离整体对象而独立存在。（例如学校、老师） 聚合关系用空心菱形的实线表示，菱形指向整体。
         组合关系 表示类之间的整体与部分的关系，但是是一种更强烈的聚合关系，是cxmtains-a关系。组合关系中，整体对象可以控制部分对象的生命周期，一旦整体不存在，部分对象也将不存在，部分对象不能脱离整体对象而存在。（头和嘴） 组合关系用带实心菱形的实线来表示，菱形指向整体。       
 泛化关系 generalization 是对象之间耦合度最大的一种关系，表示一般与特殊的关系，是父类与子类之间的关系，是一种继承关系，是is-a的关系。泛化关系用带空心三角箭头的实线表示，箭头从子类指向父类。实现代码时，使用面向对象的继承机制来实现泛化关系。
 实现关系 实现关系realization是接口与实现类之间的关系。类实现了接口，类中的操作实现了接口中所有声明的所有的抽象操作。实现关系用带空心三角箭头的虚线来表示，箭头从实现类指向接口。
@@ -51,265 +51,269 @@ UML表示操作：
 		3.抽象产品product：定义了产品规范，描述了产品的主要特性和功能
 		4.具体产品concrete product：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。
 	    ·模式的实现：
-public class AbstractFactoryTest{
-	public static void main(String[] args){
-		try{
-			Product a;
-			AbstractFactory af;
-			af = (AbstractFactory) ReadXML1.getObject();
-			a = af.newProduct();
-			a.show();
-		}catch(Exception e){
-			System.out.println(e,getMessage());
-		}
-	}
-}
-//抽象接口：提供产品的接口
-interface Product{
-	public void show();
-}
-//具体产品1:实现抽象产品中的抽象方法
-class ConcreteProduct1 implements Product{
-	public void show(){
-		System....
-	}
-}
-//具体产品2
-class ConcreteProdut2 implements Prouct{
-	public void show(){
-		System....
-	}
-}
-//抽象工厂：提供了产品的生成方法
-interface AbstractFactory{
-	public Product newProduct();
-}
-//具体工厂1:实现了产品的生成方法
-class ConcreteFactory1 implements AbstractFactory{
-	public Product newProduct(){
-		System.out.println("具体工厂1生成-->具体产品1...");
-		return new ConcreteProduct1();
-	}
-}
-//具体工厂2:实现了产品的生成方法
-class ConcreteFactory2 implements AbstractFactory
-{
-    public Product newProduct()
-    {
-        System.out.println("具体工厂2生成-->具体产品2...");
-        return new ConcreteProduct2();
-    }
-}
-//方法用于从xml配置文件中提取具体类类名，并返回一个实例对象
-class ReadXML1{
-	pulic static object getObject(){
-	try{
-	    //创建文档对象
-            DocumentBuilderFactory dFactory=DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder=dFactory.newDocumentBuilder();
-            Document doc;                           
-            doc=builder.parse(new File("src/FactoryMethod/config1.xml"));        
-            //获取包含类名的文本节点
-            NodeList nl=doc.getElementsByTagName("className");
-            Node classNode=nl.item(0).getFirstChild();
-            String cName="FactoryMethod."+classNode.getNodeValue();
-            //System.out.println("新类名："+cName);
-            //通过类名生成实例对象并将其返回
-            Class<?> c=Class.forName(cName);
-              Object obj=c.newInstance();
-            return obj;
-         }  
-         catch(Exception e)
-         {
-                   e.printStackTrace();
-                   return null;
-         }
-		}catch(){
-
-		}
-	}
-}
-    ·模式的扩展
-        当需要生成的产品不多且不会增加，一个具体工厂类就可以完成时，可以删除抽象工厂类。此时工厂方法模式将退化到简单工厂模式。
-	>抽象工厂模式 abstractFactory
-	    工厂方法模式只考虑生成同登记的产品，实际中需要综合型工厂。抽象工厂模式是工厂模式的升级版本，工厂模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品。
-	    ·定义：是一种为访问类提供一个创建一组相关或者相互依赖对象的接口，且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。
-	    ·使用的满足条件：
-	        系统中有多个产品族，每个具体工厂创建同一族但属于不同等级结构的产品
-	        系统一次只能消费其中某一族产品，即同族的产品一起使用
-	    抽象工厂模式除了具有工厂方法模式的优点外，可以在类的内部对产品族中相关联的多等级产品共同管理，而不必专门引入多个新的类来进行管理。当增加一个新的产品族时不需要修改源代码，满足开闭原则。
-	    组成结构：
-	        ·抽象工厂 提供创建产品接口，包含多个创建产品的方法new Product()，可创建多个不同等级的产品
-	            interface AbstractFactory{
-	                public Product1 newProduct1();
-	                public Product2 newProduct2()；
-	            }
-	        ·具体工厂 实现抽象工厂中的多个抽象方法，完成具体产品的创建
-	            class ConcreteFactory1 implements AbstractFactory{
-	                public Product1 newProduct1(){
-	                    System.out.println("具体工厂 1 生成-->具体产品 11...");
-                        return new ConcreteProduct11();
-	                }
-	                public Product2 newProduct2(){
-                    	 System.out.println("具体工厂 2 生成-->具体产品 21...");
-                         return new ConcreteProduct21();
-                    	                }
-	            }
-	        ·抽象产品 定义产品规范，描述产品的主要特性和功能，抽象工厂模式有多个抽象产品
-	        ·具体产品 实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间是多对一关系
-	    应用场景：
-	        ·早应用于创建不同操作系统的视窗构件。
-	        ·当需要创建的对象是一系列相互关联或者相互依赖的产品族时
-	        ·系统中有多个产品族，但每次只使用其中的某一族产品
-	        ·系统中提供了产品的类库，且所有产品的接口相同，客户端不依赖产品实例的创建细节和内部结构
-	    扩展：抽象工厂模式的扩展有一定的开闭原则倾斜性：
-	        ·当增加一个新的产品族时只需要增加一个新的具体工厂，不需要修改源代码，满足开闭原则
-	        ·当产品族中需要增加一个新种类的产品时，则所有的工厂类都需要进行修改不满足开闭原则
-	>单例模式
-	    ·为节省资源、保证数据内容的一致性，对某些类要求只能创建一个实例，即单例模式
-	    单例模式定义：一个类只有一个实例，且该类自行创建这个实例的一种模式。
-	    单例使用场景：Windows 的回收站、操作系统中的文件系统、多线程中的线程池、显卡的驱动程序对象、打印机的后台处理服务、应用程序的日志对象、数据库的连接池、网站的计数器、Web 应用的配置对象、应用程序中的对话框、系统中的缓存等常常被设计成单例。
-	    特点：
-	        1 单例只有一个实例对象
-	        2 该单例对象必须由单例类自行创建
-	        3 单例类对外提供一个访问该单例的全局访问点
-	    单例模式的结构与实现
-	        普通类的构造函数为pulic，外部类可用"new 构造函数（)"的方式来生成多个实例。当构造函数为private时，外部类无法调用，此时必须定义一个静态私有实例，并向外提供一个静态的公有函数用于创建或获取该静态私有实例。
-	        结构：
-	            单例类：包含一个实例且能自行创建这个实例的类
-	            访问类：使用单例的类
-	        实现：
-	            懒汉：类加载时没有生成单例，只有当第一次调用getinstance方法时才去创建这个单例
-	            public class LazySingleton {
-	                private static volatile LazySingleton instance = null;//保证instance在所有线程中同步
-	                private LazySingleton(){}//private避免类在外部被实例化
-	                public static synchronized LazySingleton getInstance() {
-	                    //getInstance方法前加同步
-	                    if(instance==null) {
-	                        instance = new LazySingleton();
-	                    }
-	                    return instance;
-	                }
-	                
-	            }
-	            注意：编写多线程pro时，不要删除关键字volatile和synchronized，否则将存在线程非安全问题。但是每次访问都要同步，会影响性能，且小号更多资源，此为懒汉模式缺点。
-	            饿汉：类一旦加载就创建一个单例，getinstance之前单例就已经存在
-	            public class HungrySingleton {
-	                private static final HungrySingleton instance = new HungrySigleton();
-	                private HungrySingleton() {}
-	                public static HungrySingleton getInstance() {
-	                    return instance;
-	                }
-	            }
-	            注意：饿汉模式在类创建时就以创建好一个静态的对象供系统使用，以后不再改变，是线程安全。
-	            应用场景：某类只要求生成一个对象/当对象需要被共享的场合，为了节省内存，加快对象访问速度/某类需要频繁实例化，而创建对象又需要频繁销毁，如线程池、网络连接池
-	            单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取。
-	>建造者模式 Builder
-	    建造者于工厂模式关注点不同，建造者模式注重零部件的组装过程，工厂方法模式注重零部件的创建过程，二者可结合使用
-	    ·定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示。
-	    ·优点：
-	        >各个具体的建造者相互独立，有利于系统库扩展
-	        >客户端不必知道产品内部组成的细节，便于控制细节风险
-	    ·缺点：
-	        >产品的组成必须相同，限制了使用范围
-	        >若产品的内部变化复杂，该模式会增加很多的建造者类
-	    结构与实现：
-	        模式结构：
-	            1.产品角色 包含多个组成部件的复杂对象，由具体建造者创建各个部件
-	            2.抽象建造者 是一个包含创建产品各个子部件抽象方法的接口，通常还包含一个返回复杂产品的方法getResult()
-	            3.具体建造者 实现Builder接口，完成复杂产品的各个部件的具体创建方法
-	            4.指挥者 调用建造者对象中的部件构造与装配方法完成复杂对象的创建，在指挥者中不涉及具体产品的信息
-	            class Product{
-	                private String PartA;
-	                private String PartB;
-	                private String PartC;
-	                public void setPartA(String partA){
-	                    this.partA = partA;
-	                }
-	                public void setPartB(String partB){
-                    	this.partB = partB;
+            public class AbstractFactoryTest{
+                public static void main(String[] args){
+                    try{
+                        Product a;
+                        AbstractFactory af;
+                        af = (AbstractFactory) ReadXML1.getObject();
+                        a = af.newProduct();
+                        a.show();
+                    }catch(Exception e){
+                        System.out.println(e,getMessage());
                     }
-                    public void setPartC(String partC){
-                    	this.partC = partC;
+                }
+            }
+            //抽象接口：提供产品的接口
+            interface Product{
+                public void show();
+            }
+            //具体产品1:实现抽象产品中的抽象方法
+            class ConcreteProduct1 implements Product{
+                public void show(){
+                    System....
+                }
+            }
+            //具体产品2
+            class ConcreteProdut2 implements Prouct{
+                public void show(){
+                    System....
+                }
+            }
+            //抽象工厂：提供了产品的生成方法
+            interface AbstractFactory{
+                public Product newProduct();
+            }
+            //具体工厂1:实现了产品的生成方法
+            class ConcreteFactory1 implements AbstractFactory{
+                public Product newProduct(){
+                    System.out.println("具体工厂1生成-->具体产品1...");
+                    return new ConcreteProduct1();
+                }
+            }
+            //具体工厂2:实现了产品的生成方法
+            class ConcreteFactory2 implements AbstractFactory
+            {
+                public Product newProduct()
+                {
+                    System.out.println("具体工厂2生成-->具体产品2...");
+                    return new ConcreteProduct2();
+                }
+            }
+            //方法用于从xml配置文件中提取具体类类名，并返回一个实例对象
+            class ReadXML1{
+                pulic static object getObject(){
+                try{
+                    //创建文档对象
+                        DocumentBuilderFactory dFactory=DocumentBuilderFactory.newInstance();
+                        DocumentBuilder builder=dFactory.newDocumentBuilder();
+                        Document doc;                           
+                        doc=builder.parse(new File("src/FactoryMethod/config1.xml"));        
+                        //获取包含类名的文本节点
+                        NodeList nl=doc.getElementsByTagName("className");
+                        Node classNode=nl.item(0).getFirstChild();
+                        String cName="FactoryMethod."+classNode.getNodeValue();
+                        //System.out.println("新类名："+cName);
+                        //通过类名生成实例对象并将其返回
+                        Class<?> c=Class.forName(cName);
+                          Object obj=c.newInstance();
+                        return obj;
+                     }  
+                     catch(Exception e)
+                     {
+                               e.printStackTrace();
+                               return null;
+                     }
+                    }catch(){
+                        //XX
                     }
-                    public void show(){
-                    //
+                }
+            }
+            ·模式的扩展
+                当需要生成的产品不多且不会增加，一个具体工厂类就可以完成时，可以删除抽象工厂类。此时工厂方法模式将退化到简单工厂模式。
+        >抽象工厂模式 abstractFactory
+            工厂方法模式只考虑生成同登记的产品，实际中需要综合型工厂。抽象工厂模式是工厂模式的升级版本，工厂模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品。
+            ·定义：是一种为访问类提供一个创建一组相关或者相互依赖对象的接口，且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。
+            ·使用的满足条件：
+                系统中有多个产品族，每个具体工厂创建同一族但属于不同等级结构的产品
+                系统一次只能消费其中某一族产品，即同族的产品一起使用
+            抽象工厂模式除了具有工厂方法模式的优点外，可以在类的内部对产品族中相关联的多等级产品共同管理，而不必专门引入多个新的类来进行管理。当增加一个新的产品族时不需要修改源代码，满足开闭原则。
+            组成结构：
+                ·抽象工厂 提供创建产品接口，包含多个创建产品的方法new Product()，可创建多个不同等级的产品
+                    interface AbstractFactory{
+                        public Product1 newProduct1();
+                        public Product2 newProduct2()；
                     }
-	            }
-	            abstract class Builder{
-	                protected Product product = new Product();
-	                public abstract void buildPartA();
-	                public abstract void buildPartB();
-	                public abstract void buildPartC();
-	                public Product getResult(){
-	                    return product;
-	                }
-	            }
-	            public class ConcreteBuilder extends Builder{
-	                public void buildPartA(){
-	                    product.setPartA("jianzao a");
-	                }
-	                public void buildPartB(){
-                    	product.setPartB ("jianzao b");
+                ·具体工厂 实现抽象工厂中的多个抽象方法，完成具体产品的创建
+                    class ConcreteFactory1 implements AbstractFactory{
+                        public Product1 newProduct1(){
+                            System.out.println("具体工厂 1 生成-->具体产品 11...");
+                            return new ConcreteProduct11();
+                        }
+                        public Product2 newProduct2(){
+                             System.out.println("具体工厂 2 生成-->具体产品 21...");
+                             return new ConcreteProduct21();
+                                            }
                     }
-                    public void buildPartC(){
-                    	product.setPartC("jianzao c");
+                ·抽象产品 定义产品规范，描述产品的主要特性和功能，抽象工厂模式有多个抽象产品
+                ·具体产品 实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间是多对一关系
+            应用场景：
+                ·早应用于创建不同操作系统的视窗构件。
+                ·当需要创建的对象是一系列相互关联或者相互依赖的产品族时
+                ·系统中有多个产品族，但每次只使用其中的某一族产品
+                ·系统中提供了产品的类库，且所有产品的接口相同，客户端不依赖产品实例的创建细节和内部结构
+            扩展：抽象工厂模式的扩展有一定的开闭原则倾斜性：
+                ·当增加一个新的产品族时只需要增加一个新的具体工厂，不需要修改源代码，满足开闭原则
+                ·当产品族中需要增加一个新种类的产品时，则所有的工厂类都需要进行修改不满足开闭原则
+        >单例模式
+            ·为节省资源、保证数据内容的一致性，对某些类要求只能创建一个实例，即单例模式
+            单例模式定义：一个类只有一个实例，且该类自行创建这个实例的一种模式。
+            单例使用场景：Windows 的回收站、操作系统中的文件系统、多线程中的线程池、显卡的驱动程序对象、打印机的后台处理服务、应用程序的日志对象、数据库的连接池、网站的计数器、Web 应用的配置对象、应用程序中的对话框、系统中的缓存等常常被设计成单例。
+            特点：
+                1 单例只有一个实例对象
+                2 该单例对象必须由单例类自行创建
+                3 单例类对外提供一个访问该单例的全局访问点
+            单例模式的结构与实现
+                普通类的构造函数为pulic，外部类可用"new 构造函数（)"的方式来生成多个实例。当构造函数为private时，外部类无法调用，此时必须定义一个静态私有实例，并向外提供一个静态的公有函数用于创建或获取该静态私有实例。
+                结构：
+                    单例类：包含一个实例且能自行创建这个实例的类
+                    访问类：使用单例的类
+                实现：
+                    懒汉：类加载时没有生成单例，只有当第一次调用getinstance方法时才去创建这个单例
+                    public class LazySingleton {
+                        private static volatile LazySingleton instance = null;//保证instance在所有线程中同步
+                        private LazySingleton(){}//private避免类在外部被实例化
+                        public static synchronized LazySingleton getInstance() {
+                            //getInstance方法前加同步
+                            if(instance==null) {
+                                instance = new LazySingleton();
+                            }
+                            return instance;
+                        }  
                     }
-	            }
-	            class Director{
-	                private Builder builder;
-	                public Director(Builder builder){
-	                    this.builder = builder;
-	                }
-	                //产品构建与组装方法
-	                public Product construct(){
-	                    builder.buildPartA();
-	                    builder.buildPartB();
-	                    builder.buildPartC();
-	                    return builder.getResult();
-	                }
-	            }
-	            public class Client{
-	                public static void main(String[] args){
-	                    Builder builder = new ConcreteBuilder();
-	                    Director director = new Director(builder);
-	                    Product product = director.construct();
-	                    product.show();
-	                }
-	            }
-	>原型模式
-		某些系统中存在大量或者相类似对象的创建问题，用传统的构造函数来创建对象，会比较复杂而且耗时耗资源。原型模式定义：用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或类似的新对象。
-		结构与实现：
-			java提供来clone()方法，所以实现原型模式很简单。
-			·模式的结构：
-				包括以下主要角色：
-					1.抽象原型类：规定了具体原型对象必须实现的接口。
-					2.具体原型类：实现抽象原型类的clone()方法，它是可被复制的对象。
-					3.访问类：使用具体原型类中的clone（）方法来复制新的对象。
-			·模式的实现：
-				原型模式的克隆分为浅克隆和深克隆，java中的object类提供了浅克隆的clone()，具体原型类只要实现cloneable接口就可以实现对象的浅克隆，此处的cloneable接口就是抽象原型类代码：
-//具体原型类
-class Realizetype implements Cloneable {
-	Realizetype{
-		xxx
-	}
-	public Object clone() throws CloneNotSupportException{
-		return (Realizetype)super.clone();
-	}
-}
-//原型模式的测试类-访问类
-public class PrototypeTest{
-	public static void main(String[] args) throws CloneNotSupportException{
-		Realizetype obj1 = new Realizetype();
-		Realizetype obj2 = (Realizetype)obj1.clone();
-		xxx
-	}
-}
-		·原型模式的应用场景：
-		>对象之间相似或相同，即只是有个别几个属性不同的时候。
-		>对象的创建过程比较麻烦，但复制比较简单的时候。
-		·原型模式的扩展：
-		可扩展为带原型管理器的原型模式，在原型模式的基础上增加一个原型管理器prototypemanager类。该类用hashmap保存多个复制的原型，client类可以通过管理器的get(string id)方法从map中获取复制的原型。
+                    注意：编写多线程pro时，不要删除关键字volatile和synchronized，否则将存在线程非安全问题。但是每次访问都要同步，会影响性能，且小号更多资源，此为懒汉模式缺点。
+                    饿汉：类一旦加载就创建一个单例，getinstance之前单例就已经存在
+                    public class HungrySingleton {
+                        private static final HungrySingleton instance = new HungrySigleton();
+                        private HungrySingleton() {}
+                        public static HungrySingleton getInstance() {
+                            return instance;
+                        }
+                    }
+                    注意：饿汉模式在类创建时就以创建好一个静态的对象供系统使用，以后不再改变，是线程安全。
+                    应用场景：某类只要求生成一个对象/当对象需要被共享的场合，为了节省内存，加快对象访问速度/某类需要频繁实例化，而创建对象又需要频繁销毁，如线程池、网络连接池
+                    单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取。
+        >建造者模式 Builder
+            建造者于工厂模式关注点不同，建造者模式注重零部件的组装过程，工厂方法模式注重零部件的创建过程，二者可结合使用
+            ·定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示。
+            ·优点：
+                >各个具体的建造者相互独立，有利于系统库扩展
+                >客户端不必知道产品内部组成的细节，便于控制细节风险
+            ·缺点：
+                >产品的组成必须相同，限制了使用范围
+                >若产品的内部变化复杂，该模式会增加很多的建造者类
+            结构与实现：
+                模式结构：
+                    1.产品角色 包含多个组成部件的复杂对象，由具体建造者创建各个部件
+                    2.抽象建造者 是一个包含创建产品各个子部件抽象方法的接口，通常还包含一个返回复杂产品的方法getResult()
+                    3.具体建造者 实现Builder接口，完成复杂产品的各个部件的具体创建方法
+                    4.指挥者 调用建造者对象中的部件构造与装配方法完成复杂对象的创建，在指挥者中不涉及具体产品的信息
+                    class Product{
+                        private String PartA;
+                        private String PartB;
+                        private String PartC;
+                        public void setPartA(String partA){
+                            this.partA = partA;
+                        }
+                        public void setPartB(String partB){
+                            this.partB = partB;
+                        }
+                        public void setPartC(String partC){
+                            this.partC = partC;
+                        }
+                        public void show(){
+                        //显示产品特性
+                        }
+                    }
+                    abstract class Builder{
+                        //创建产品对象
+                        protected Product product = new Product();
+                        public abstract void buildPartA();
+                        public abstract void buildPartB();
+                        public abstract void buildPartC();
+                        public Product getResult(){//返回产品对象
+                            return product;
+                        }
+                    }
+                    public class ConcreteBuilder extends Builder{
+                        public void buildPartA(){
+                            product.setPartA("jianzao a");
+                        }
+                        public void buildPartB(){
+                            product.setPartB ("jianzao b");
+                        }
+                        public void buildPartC(){
+                            product.setPartC("jianzao c");
+                        }
+                    }
+                    class Director{
+                        private Builder builder;
+                        public Director(Builder builder){
+                            this.builder = builder;
+                        }
+                        //产品构建与组装方法
+                        public Product construct(){
+                            builder.buildPartA();
+                            builder.buildPartB();
+                            builder.buildPartC();
+                            return builder.getResult();
+                        }
+                    }
+                    public class Client{
+                        public static void main(String[] args){
+                            Builder builder = new ConcreteBuilder();
+                            Director director = new Director(builder);
+                            Product product = director.construct();
+                            product.show();
+                        }
+                    }
+                模式的应用场景：
+                    1.创建的对象比较复杂，由多个部件构成，各部件面临复杂的变化，但构件间的建造顺序是稳定的。
+                    2.创建复杂对象的算法独立于该对象的组成部分以及它们的装配方式，即产品的构件过程和最终表示是独立的。
+                模式的扩展：建造者模式在应用中可根据需要改变，若创建的产品种类只有一种，只需要一个具体的建造者，此时可以省略抽象建造者、甚至省略指挥者角色
+        >原型模式
+            某些系统中存在大量或者相类似对象的创建问题，用传统的构造函数来创建对象，会比较复杂而且耗时耗资源。原型模式定义：用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或类似的新对象。
+            结构与实现：
+                java提供来clone()方法，所以实现原型模式很简单。
+                ·模式的结构：
+                    包括以下主要角色：
+                        1.抽象原型类：规定了具体原型对象必须实现的接口。
+                        2.具体原型类：实现抽象原型类的clone()方法，它是可被复制的对象。
+                        3.访问类：使用具体原型类中的clone（）方法来复制新的对象。
+                ·模式的实现：
+                    原型模式的克隆分为浅克隆和深克隆，java中的object类提供了浅克隆的clone()，具体原型类只要实现cloneable接口就可以实现对象的浅克隆，此处的cloneable接口就是抽象原型类代码：
+                    //具体原型类
+                    class Realizetype implements Cloneable {
+                        Realizetype{
+                            xxx
+                        }
+                        public Object clone() throws CloneNotSupportException{
+                            return (Realizetype)super.clone();
+                        }
+                    }
+                    //原型模式的测试类-访问类
+                    public class PrototypeTest{
+                        public static void main(String[] args) throws CloneNotSupportException{
+                            Realizetype obj1 = new Realizetype();
+                            Realizetype obj2 = (Realizetype)obj1.clone();
+                            xxx
+                        }
+                    }
+            ·原型模式的应用场景：
+            >对象之间相似或相同，即只是有个别几个属性不同的时候。
+            >对象的创建过程比较麻烦，但复制比较简单的时候。
+            ·原型模式的扩展：
+            可扩展为带原型管理器的原型模式，在原型模式的基础上增加一个原型管理器prototypemanager类。该类用hashmap保存多个复制的原型，client类可以通过管理器的get(string id)方法从map中获取复制的原型。
 ·结构性模式：
     关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。
         >适配器模式

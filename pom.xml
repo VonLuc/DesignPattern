@@ -13,6 +13,7 @@
         <module>SingletonPattern</module>
         <module>PrototypePattern</module>
         <module>AbstractFactory</module>
+        <module>BuilderPattern</module>
     </modules>
 
 
