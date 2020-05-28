@@ -331,6 +331,65 @@ UML表示操作：
             运用共享技术来有效的支持大量细粒度对象的复用
         >代理模式
             对某对象提供一种代理以控制对该对象的访问。即客户端通过代理间接地访问该对象，从而限制、增强或修改该对象的一些特性
+            定义：
+                由于某些原因需要给某对象提供一个代理以控制对该对象的访问。访问对象不适合或者不能直接引用目标对象，代理对象作为访问对象和目标对象之间的中介。
+            优点：
+                ·代理模式在客户端与目标对象之间祈祷一个中介作用和保护目标对象的作用
+                ·代理对象可以扩展目标对象的功能
+                ·代理模式能见客户端与目标对象分离，在一定程度上降低系统耦合度
+            缺点：
+                ·在客户端和目标对象之间增加一个代理对象，会造成请求处理速度变慢
+                ·增加系统复杂度
+            结构：
+                1-抽象主题 subject类：通过接口或抽象类声明真实主题和代理对象实现的业务方法
+                2-真实主题 Real Subject类：实现了抽象主题中的具体业务，是代理对象所代表的真实对象，是最终要引用的对象
+                3-代理 Proxy类：提供了与真实主题相同的接口，其内部含有对真实主题的引用，它可以访问、控制或者扩展真实主题的功能。
+            实现：
+                package proxy；
+                public class ProxyTest{
+                    public static void main(String[] args){
+                        Proxy proxy = new Proxy();
+                        proxy.Request();
+                    }
+                }
+                //抽象主题
+                interface Subject{
+                    void Request();
+                }
+                //真实主题
+                class RealSubject implements Subject{
+                    public void Request(){
+                        System.out.println("访问真实主题方法...);
+                    }
+                }
+                //代理
+                class Proxy implements Subject{
+                    private RealSubject realSubject;
+                    public void Request(){
+                        if(realSubject==null){
+                            realSubject=new RealSubject();
+                        }
+                        preRequest();
+                        realSubject.Request();
+                        postRequest();
+                    }
+                    public void preRequest(){
+                        System.out.println("访问真实主题之前的预处理);
+                    }
+                    public void postRequest(){
+                        System.out.println("访问真实主题之后的后续处理");
+                    }
+                }
+            使用场景：
+                ·远程代理，通常为隐藏目标对象存在于不同地址空间的事实，方便客户端访问。
+                ·虚拟代理，通常用于要创建的目标对象开销很大时。
+                ·安全代理，通常用于控制不同种类客户对真实对象的访问权限
+                ·智能代理，主要用于调用目标对象时，代理附加一些额外的处理功能。
+                ·延迟加载，指为提高系统的性能，延迟对目标的加载。
+            代理模式的扩展：
+                代理类中包含了对真实主题的引用，这种方式存在问题：
+                    1，真实主题与代理主题一一对应，增加真实主题也要增加代理
+                    2，设计代理以前真实主题必须事先存在，不太灵活。采用动态代理模式可以解决以上问题，如springAOP     
 ·行为模式：
     关注对象之间的通信：
 	>责任链模式
