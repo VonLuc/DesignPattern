@@ -1,7 +1,5 @@
 package Example1;
 
-import com.sun.deploy.util.StringUtils;
-
 /**
  * @description:抽象建造者：装修工人
  * @author: zhanhongyu
