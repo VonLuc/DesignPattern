@@ -3,7 +3,7 @@ package com.example1;
 import java.util.List;
 
 /**
- * @description:
+ * @description: 具体迭代器
  * @author: VonLuc
  * @date: 2020/10/12
  * @time: 2:36 下午

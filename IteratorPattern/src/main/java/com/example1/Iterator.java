@@ -1,7 +1,7 @@
 package com.example1;
 
 /**
- * @description:
+ * @description: 抽象迭代器
  * @author: VonLuc
  * @date: 2020/10/12
  * @time: 2:35 下午
