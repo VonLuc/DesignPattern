@@ -32,7 +32,8 @@ UML表示操作：
 设计模式
 ·创建型模式：
     提供了一种在创建对象的同时隐藏创建逻辑的方式，避免使用new实例化对象。使程序在判断针对某个给定实例需要创建哪些对象时更加灵活
-    	>工厂方法模式
+    
+    >工厂方法模式
     	模式的应用场景：
     	>>客户只知道创建产品的工厂名，不知道具体的产品名。
     	>>创建对象的任务由多个具体子工厂中的某一个完成，而抽象工厂只提供创建产品的接口。
@@ -50,88 +51,10 @@ UML表示操作：
 		2.具体工厂concrete factory:主要实现抽象工厂中的抽象方法，完成具体产品的创建
 		3.抽象产品product：定义了产品规范，描述了产品的主要特性和功能
 		4.具体产品concrete product：实现了抽象产品角色所定义的接口，由具体工厂来创建，它同具体工厂之间一一对应。
-	    ·模式的实现：
-            public class AbstractFactoryTest{
-                public static void main(String[] args){
-                    try{
-                        Product a;
-                        AbstractFactory af;
-                        af = (AbstractFactory) ReadXML1.getObject();
-                        a = af.newProduct();
-                        a.show();
-                    }catch(Exception e){
-                        System.out.println(e,getMessage());
-                    }
-                }
-            }
-            //抽象接口：提供产品的接口
-            interface Product{
-                public void show();
-            }
-            //具体产品1:实现抽象产品中的抽象方法
-            class ConcreteProduct1 implements Product{
-                public void show(){
-                    System....
-                }
-            }
-            //具体产品2
-            class ConcreteProdut2 implements Prouct{
-                public void show(){
-                    System....
-                }
-            }
-            //抽象工厂：提供了产品的生成方法
-            interface AbstractFactory{
-                public Product newProduct();
-            }
-            //具体工厂1:实现了产品的生成方法
-            class ConcreteFactory1 implements AbstractFactory{
-                public Product newProduct(){
-                    System.out.println("具体工厂1生成-->具体产品1...");
-                    return new ConcreteProduct1();
-                }
-            }
-            //具体工厂2:实现了产品的生成方法
-            class ConcreteFactory2 implements AbstractFactory
-            {
-                public Product newProduct()
-                {
-                    System.out.println("具体工厂2生成-->具体产品2...");
-                    return new ConcreteProduct2();
-                }
-            }
-            //方法用于从xml配置文件中提取具体类类名，并返回一个实例对象
-            class ReadXML1{
-                pulic static object getObject(){
-                try{
-                    //创建文档对象
-                        DocumentBuilderFactory dFactory=DocumentBuilderFactory.newInstance();
-                        DocumentBuilder builder=dFactory.newDocumentBuilder();
-                        Document doc;                           
-                        doc=builder.parse(new File("src/FactoryMethod/config1.xml"));        
-                        //获取包含类名的文本节点
-                        NodeList nl=doc.getElementsByTagName("className");
-                        Node classNode=nl.item(0).getFirstChild();
-                        String cName="FactoryMethod."+classNode.getNodeValue();
-                        //System.out.println("新类名："+cName);
-                        //通过类名生成实例对象并将其返回
-                        Class<?> c=Class.forName(cName);
-                          Object obj=c.newInstance();
-                        return obj;
-                     }  
-                     catch(Exception e)
-                     {
-                               e.printStackTrace();
-                               return null;
-                     }
-                    }catch(){
-                        //XX
-                    }
-                }
-            }
-            ·模式的扩展
-                当需要生成的产品不多且不会增加，一个具体工厂类就可以完成时，可以删除抽象工厂类。此时工厂方法模式将退化到简单工厂模式。
-        >抽象工厂模式 abstractFactory
+        ·模式的扩展
+            当需要生成的产品不多且不会增加，一个具体工厂类就可以完成时，可以删除抽象工厂类。此时工厂方法模式将退化到简单工厂模式。
+                
+    >抽象工厂模式 abstractFactory
             工厂方法模式只考虑生成同登记的产品，实际中需要综合型工厂。抽象工厂模式是工厂模式的升级版本，工厂模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品。
             ·定义：是一种为访问类提供一个创建一组相关或者相互依赖对象的接口，且访问类无须指定所要产品的具体类就能得到同族的不同等级的产品的模式结构。
             ·使用的满足条件：
@@ -165,7 +88,8 @@ UML表示操作：
             扩展：抽象工厂模式的扩展有一定的开闭原则倾斜性：
                 ·当增加一个新的产品族时只需要增加一个新的具体工厂，不需要修改源代码，满足开闭原则
                 ·当产品族中需要增加一个新种类的产品时，则所有的工厂类都需要进行修改不满足开闭原则
-        >单例模式
+                
+    >单例模式
             ·为节省资源、保证数据内容的一致性，对某些类要求只能创建一个实例，即单例模式
             单例模式定义：一个类只有一个实例，且该类自行创建这个实例的一种模式。
             单例使用场景：Windows 的回收站、操作系统中的文件系统、多线程中的线程池、显卡的驱动程序对象、打印机的后台处理服务、应用程序的日志对象、数据库的连接池、网站的计数器、Web 应用的配置对象、应用程序中的对话框、系统中的缓存等常常被设计成单例。
@@ -203,7 +127,8 @@ UML表示操作：
                     注意：饿汉模式在类创建时就以创建好一个静态的对象供系统使用，以后不再改变，是线程安全。
                     应用场景：某类只要求生成一个对象/当对象需要被共享的场合，为了节省内存，加快对象访问速度/某类需要频繁实例化，而创建对象又需要频繁销毁，如线程池、网络连接池
                     单例模式扩展：有限的多例模式->生成有限个实例并保存在ArrayList中，客户需要时可随机获取。
-        >建造者模式 Builder
+                    
+    >建造者模式 Builder
             建造者于工厂模式关注点不同，建造者模式注重零部件的组装过程，工厂方法模式注重零部件的创建过程，二者可结合使用
             ·定义：指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示。
             ·优点：
@@ -218,70 +143,12 @@ UML表示操作：
                     2.抽象建造者 是一个包含创建产品各个子部件抽象方法的接口，通常还包含一个返回复杂产品的方法getResult()
                     3.具体建造者 实现Builder接口，完成复杂产品的各个部件的具体创建方法
                     4.指挥者 调用建造者对象中的部件构造与装配方法完成复杂对象的创建，在指挥者中不涉及具体产品的信息
-                    class Product{
-                        private String PartA;
-                        private String PartB;
-                        private String PartC;
-                        public void setPartA(String partA){
-                            this.partA = partA;
-                        }
-                        public void setPartB(String partB){
-                            this.partB = partB;
-                        }
-                        public void setPartC(String partC){
-                            this.partC = partC;
-                        }
-                        public void show(){
-                        //显示产品特性
-                        }
-                    }
-                    abstract class Builder{
-                        //创建产品对象
-                        protected Product product = new Product();
-                        public abstract void buildPartA();
-                        public abstract void buildPartB();
-                        public abstract void buildPartC();
-                        public Product getResult(){//返回产品对象
-                            return product;
-                        }
-                    }
-                    public class ConcreteBuilder extends Builder{
-                        public void buildPartA(){
-                            product.setPartA("jianzao a");
-                        }
-                        public void buildPartB(){
-                            product.setPartB ("jianzao b");
-                        }
-                        public void buildPartC(){
-                            product.setPartC("jianzao c");
-                        }
-                    }
-                    class Director{
-                        private Builder builder;
-                        public Director(Builder builder){
-                            this.builder = builder;
-                        }
-                        //产品构建与组装方法
-                        public Product construct(){
-                            builder.buildPartA();
-                            builder.buildPartB();
-                            builder.buildPartC();
-                            return builder.getResult();
-                        }
-                    }
-                    public class Client{
-                        public static void main(String[] args){
-                            Builder builder = new ConcreteBuilder();
-                            Director director = new Director(builder);
-                            Product product = director.construct();
-                            product.show();
-                        }
-                    }
                 模式的应用场景：
                     1.创建的对象比较复杂，由多个部件构成，各部件面临复杂的变化，但构件间的建造顺序是稳定的。
                     2.创建复杂对象的算法独立于该对象的组成部分以及它们的装配方式，即产品的构件过程和最终表示是独立的。
                 模式的扩展：建造者模式在应用中可根据需要改变，若创建的产品种类只有一种，只需要一个具体的建造者，此时可以省略抽象建造者、甚至省略指挥者角色
-        >原型模式
+                
+    >原型模式
             某些系统中存在大量或者相类似对象的创建问题，用传统的构造函数来创建对象，会比较复杂而且耗时耗资源。原型模式定义：用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或类似的新对象。
             结构与实现：
                 java提供来clone()方法，所以实现原型模式很简单。
@@ -314,9 +181,11 @@ UML表示操作：
             >对象的创建过程比较麻烦，但复制比较简单的时候。
             ·原型模式的扩展：
             可扩展为带原型管理器的原型模式，在原型模式的基础上增加一个原型管理器prototypemanager类。该类用hashmap保存多个复制的原型，client类可以通过管理器的get(string id)方法从map中获取复制的原型。
+            
 ·结构型模式：描述如何将类或对象按某种布局组成更大的结构。分为类结构型模式和对象结构型模式，类结构型模式采用继承机制来组织接口和类，对象结构型模式采用组合或聚合来组合对象。组合关系或聚合关系比继承关系耦合度低，故对象结构型模式比类结构型模式更灵活。
     关注类和对象的组合。继承的概念被用来组合接口和定义组合对象获得新功能的方式。
-        >适配器模式 Adapter
+    
+    >适配器模式 Adapter
             将一个类的接口转换成客户希望的另一个接口，使原本由于接口不兼容而不能在一起的类能一起工作
             定义：将一个类接口转换为被希望的另一个接口，是原先由于接口不兼容不可一起工作的类进行合作。、
                 分为类结构型模式（耦合度高）、对象结构型模式
@@ -335,7 +204,8 @@ UML表示操作：
                 ·使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同
             扩展：
                 可扩展为双向适配器模式，双向适配器既可以把适配者接口转换成目标接口，也可反过来。
-        >桥接模式 Bridge 
+                
+    >桥接模式 Bridge 
             某些类具备多个维度的数据时，使用继承会导致对应的子类多，扩展困难。
             特点：
                 将抽象与现实分离，使它们可以独立变化。用组合关系代替继承关系来实现，降低抽象和实现这两个可变维度的耦合度。
@@ -355,8 +225,9 @@ UML表示操作：
                 3 当一个系统需要在构件的抽象化角色和具体化角色之间增加更多的灵活性时
             扩展：
                 开发时桥接可与适配器联合，当桥接实现化角色的接口与现有类的接口不一致时，可以在二者中定义一个适配器将二者连接起来
-        >过滤器模式
-        >组合模式 Composite 分为透明式和安全式的组合模式
+                
+    >过滤器模式
+    >组合模式 Composite 分为透明式和安全式的组合模式
             部分-整体模式，将对象组合成树状层次结构，使用户对单个对象和组合对象具有一致的访问性
             优势：
                 ·组合模式使客户端代码可一致地处理单个对象和组合对象，无需关心自己处理地是单个对象还是组合对象，简化客户端代码
@@ -374,8 +245,9 @@ UML表示操作：
                     组合中的叶节点对象，没有子节点，用于实现抽象构件角色中声明的公共接口
                 3 树枝构件角色：Composite
                     组合中的分支节点对象，有子节点。它实现了抽象构件角色中声明的接口。
-                    主要作用是存储和管理子部件，通常包含add、remove、getchild等                                   
-        >装饰器模式
+                    主要作用是存储和管理子部件，通常包含add、remove、getchild等 
+                                                      
+    >装饰器模式
             动态的给对象增加一些职责，即增加其额外的功能。
             优点：
                 ·采用装饰模式扩展功能比采用继承方式更灵活
@@ -397,7 +269,8 @@ UML表示操作：
                 装饰模式的4个母鹅色不是任何时候都要存在，以下情况可简化：
                     ·如果只有一个具体构件而没有抽象构件时，可让抽象装饰继承具体构件。
                     ·如果只有一个具体装饰时，可以将抽象装饰和具体装饰合并。
-        >外观模式 Facade|“迪米特法则”的典型应用
+                    
+    >外观模式 Facade|“迪米特法则”的典型应用
             为多个复杂的自系统提供一个一致的接口，使这些子系统更加容易被访问，该模式对外有一个统一接口，外部程序不用关心内部子程序具体实现
             定义：
             优点：
@@ -415,7 +288,8 @@ UML表示操作：
                 ·对分层结构系统构建时，使用外观模式定义子系统中每层的入口点可以简化子系统之间的依赖关系
                 ·当一个复杂系统的子系统很多时，外观模式可以为系统设计一个简单的接口供外界访问
                 ·当客户端与多个子系统之间存在很大的联系时，引入外观模式可将它们分离，从而提高子系统的独立性和可移植性
-        >享元模式 Flyweight
+                
+    >享元模式 Flyweight
             运用共享技术来有效的支持大量细粒度对象的复用
             定义：运用共享技术来有效地支持大量细粒度对象的复用。通过共享已经存在的对象来大幅度减少需要创建的对象数量、避免大量相似类的开销，提高系统资源利用率。
             优点：
@@ -441,7 +315,8 @@ UML表示操作：
                 结构图通常包含可以共享的部分和不可以共享的部分。在实际使用过程中，有时候会稍加改变，即存在两种特殊的享元模式：单纯享元模式和复合享元模式：
                     ·单纯享元模式，这种享元模式中的所有的具体享元类都是可以共享的，不存在非共享的具体享元类
                     ·复合享元模式，这种享元模式中的有些享元对象是由一些单纯享元对象组合而成的，它们就是复合享元对象
-        >代理模式
+                    
+    >代理模式
             对某对象提供一种代理以控制对该对象的访问。即客户端通过代理间接地访问该对象，从而限制、增强或修改该对象的一些特性
             定义：
                 由于某些原因需要给某对象提供一个代理以控制对该对象的访问。访问对象不适合或者不能直接引用目标对象，代理对象作为访问对象和目标对象之间的中介。
@@ -501,9 +376,11 @@ UML表示操作：
             代理模式的扩展：
                 代理类中包含了对真实主题的引用，这种方式存在问题：
                     1，真实主题与代理主题一一对应，增加真实主题也要增加代理
-                    2，设计代理以前真实主题必须事先存在，不太灵活。采用动态代理模式可以解决以上问题，如springAOP     
+                    2，设计代理以前真实主题必须事先存在，不太灵活。采用动态代理模式可以解决以上问题，如springAOP
+                    
 ·行为模式：
     关注对象之间的通信：
+    
 	>责任链模式
 	    使用场景：责任链模式也叫职责链模式/
 	        ·有多个对象可以处理一个请求，哪个对象处理该请求由运行时刻自动确定
@@ -527,6 +404,7 @@ UML表示操作：
 	    扩展：
 	        ·纯的职责链模式：一个请求必须被某一个处理者对象所接收，且一个具体处理者对某个请求的处理只能采用以下两种行为之一：自己处理（承担责任）；把责任推给下家处理。
 	        ·不纯的职责链模式：允许出现某一个具体处理者对象在承担了请求的一部分责任后又将剩余的责任传给下家的情况，且一个请求可以最终不被任何接收端对象所接收。
+	        
 	>命令模式
 	    使用场景：
 	        ·将方法的请求者与方法的实现者进行解藕。
@@ -549,6 +427,7 @@ UML表示操作：
 	        4 调用者/请求者角色 Invoker：请求的发送者，通常拥有很多命令对象，并通过访问命令对象来自执行相关的请求，不直接访问接受者
 	    扩展：
 	        命令模式+组合模式=宏命令模式/组合命令模式「宏命令包含了一组命令，充当具体命令与调用者的双重角色，执行时将递归调用其包含的所有命令」
+	        
 	>迭代器模式 Iterator 是一种对象行为型模式，满足开闭和单一职责原则，如collection、list、set、map中都包含迭代器
 	    定义：提供一个对象来顺序访问聚合对象中的一系列数据，而不暴露聚合对象的内部表示
 	    优点：
@@ -609,6 +488,7 @@ UML表示操作：
 	        3 环境类 Context： 持有一个策略类的引用，最终给客户端调用
 	    扩展：
 	        当策略很多时，客户端管理所有策略算法会复杂，在环境类中使用策略工厂模式管理这些策略类将大大减少客户端的工作复杂度
+	        
 	>模版模式
 	    场景：
 	        //简历模板、论文模板、Word 中模板文件等
@@ -634,10 +514,12 @@ UML表示操作：
 	        2 具体子类 concrete class：实现抽象类中所定义的抽象方法和钩子方法，是一个顶级逻辑的一个组成步骤。      
 	    扩展：
 	        可通过在具体子类中重写钩子方法，来改变抽象父类中的运行结果。
+	        
 	>访问者模式
 	>解释器模式 Interpreter
     	    使用场景：
     	    定义：给分析对象定义一个语言，并定义该语言的文法，再涉及一个解释器来解释语言中的句子。
+    	    
 ·j2ee模式：
     关注表示层，由sun java center鉴定
         >mvc模式
