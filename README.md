@@ -548,12 +548,11 @@ UML表示操作：
 	        ·违反依赖倒置原则，访问模式依赖了具体类，但是未依赖抽象类
 	    结构：
 	        1 抽象访问者 Visitor：定义一个访问具体元素的接口，为每个具体元素类对应一个访问操作visit()，该操作中的参数类型标识了被访问的具体元素
-	        2 具体访问着 ConcreteVisitor：实现抽象访问者
+	        2 具体访问者 ConcreteVisitor：实现抽象访问者
 	        3 抽象元素 Element：声明一个包含接受操作accept()的接口，被接受的访问者对象作为accept方法的参数
 	        4 具体元素 ConcreteElement：实现抽象元素角色提供的accept()操作，其方法通常都是visitor.visit(this)，另外具体元素中可能还包含本身业务逻辑的相关操作
-	        5 对象结构 Object Structure:
+	        5 对象结构 Object Structure:一个包含元素角色的容器，提供让访问者对象遍历容器中的所有元素的方法，涉及list、set、map等
 	    场景：
-	    
 	    
 	>解释器模式 Interpreter
     	    使用场景：
